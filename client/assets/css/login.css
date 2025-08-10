@@ -99,3 +99,25 @@ button[type="submit"]:hover {
 .links a:hover {
   text-decoration: underline;
 }
+h1 {
+color: #95d5b2;
+
+
+}
+
+.sign_up{
+
+cursor:pointer;
+color: #95d5b2;
+
+}
+.reload{
+color: #95d5b2;
+padding: 20px;
+cursor: pointer;
+
+}
+.reload:hover{
+text-decoration: underline;
+
+}
