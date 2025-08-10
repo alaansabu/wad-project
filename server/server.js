@@ -1,6 +1,7 @@
 const express = require('express');
 const dotenv = require('dotenv');
 const connectDb = require("./config/connect")
+
 dotenv.config();
 
 connectDb()
@@ -18,3 +19,6 @@ app.listen(PORT, (error) => {
     
     console.log(`Server running successfully at port ${PORT}`);
 });
+
+
+
