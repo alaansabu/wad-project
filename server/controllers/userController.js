@@ -1,220 +1,196 @@
-const Nodemailer = require('nodemailer')
-const crypto = require('crypto')
-const users = require('../models/users');
-const { register } = require('module');
+const nodemailer = require('nodemailer');
+const crypto = require('crypto');
+const User = require('../models/users'); // Model name fixed
 
 require('dotenv').config();
 
+// Nodemailer transporter
+const transport = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: process.env.EMAIL_ADRESS,
+    pass: process.env.EMAIL_PASS
+  }
+});
 
-const transport = Nodemailer.createTransport(
+// Generate 6-digit OTP
+const generateOtp = () => crypto.randomInt(100000, 999999).toString();
 
-{
+// REGISTER
+exports.register = async (req, res) => {
+  try {
+    const { name, password, email, confirmPassword } = req.body;
 
-service:'gmail',
-auth:{
-user:process.env.EMAIL_ADRESS,
-pass:process.env.EMAIL_PASS
-}
-}
+    if (!name || !email || !password || !confirmPassword) {
+      return res.status(400).json({ message: 'All fields are required' });
+    }
 
+    let user = await User.findOne({ email });
+    if (user) {
+      return res.status(400).json({ message: 'User already exists' });
+    }
 
-)
-
-//otp gene
-
-const generateOtp = ()=> crypto.randomInt(100000 , 999999).toString()
-
-
-//register user
-
-exports.register = async (req,res)=>{
-
-try {
-    
-
-    
-
-const {name,password,email,confirmPassword} =  req.body;
-
-const user = await users.findOne(email)
-
-if (user){
-
-   return  res.status(400).json({message:'user alredy exists'})
-
-}
-
-
- if (password !== confirmPassword) {
+    if (password !== confirmPassword) {
       return res.status(400).json({ message: 'Passwords do not match' });
     }
 
+    const otp = generateOtp();
+    const otpExpiry = new Date(Date.now() + 10 * 60 * 1000); // 10 min
 
-const otp = generateOtp()
-const otpExpiery = new Date(Date.now()+10*60*1000)
+    user = new User({ name, email, password, confirmPassword, otp, otpExpiry, isVerified: false });
+    await user.save();
 
-user = new users ({name,password,otp,otpExpiery})
-await user.save()
+    await transport.sendMail({
+      from: "selfflearning@gmail.com",
+      to: email,
+      subject: "Your OTP",
+      text: `Your OTP is ${otp}`
+    });
 
+    res.status(200).json({ message: "OTP sent successfully" });
 
-await  transport.sendMail({
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error", error });
+  }
+};
 
-    from:"selfflearning@gmail.com",
-    to:email,
-    subject:"your otp is",
-    text:`your otp is ${otp}`
-})
-
-    res.status(200).json({message:"otp send successfully"})
-
-}
- catch (error) {
-
-    console.log(error);
+// VERIFY OTP
+exports.verifyOtp = async (req, res) => {
+  try {
+    const { email, otp } = req.body;
     
-res.status(500).josn({message:"server error"})
-
-
- }}
-
- //verigy otp
-
- exports.verifyOtp = async(req,res)=>{
-try {
-    
-    
-
-
-const {email,otp} =req.body;
-const user = users.findOne({email})
- if(!user){
-
-return res.status(404).json({message:"user not found"})
-
-
- }
-
- if(user.isVerified){
-
-    return res.status(400).json({message:"user already verified"})
-
- }
-
-if(user.otp !== otp || user.otpExpiery < new date()){
-
-res.status(400).json({message:"invalid or expired otp"})
-
-}
-
-user.isVerified = true;
-user.otp = undefined;
-use.otpExpiery = undefined;
-
-await  user.save()
-
-res.status(200).json({message:"user verified successfully"})
-
- }
-  catch (error) {
-
-
-    res.status(500).json({message:"server error " , error})
-
- }}
-
- //resend otp
-
-exports.resendOTP = async(req,res)=>{
-
-
-    try {
-
-        const {email} = req.body
-
-        const user  = await user.findOne({email})
-        if(!user) return res.status(404).json({message:"user does not exists"})
-         if(user.isVerified){
-
-    return res.status(400).json({message:"user already verified"})
-         }
-    const otp = generateOtp()
-    user.otp = otp
-    user.otpExpiery = new Date(Date.now() +10*60*1000)
-
-
-            await user.save()
-
-    await  transport.sendMail({
-
-    from:"selfflearning@gmail.com",
-    to:email,
-    subject:"your otp is",
-    text:`your otp is ${otp}`
-})
-
-
- 
-
-    } catch (error) {
-
-            res.status(500).json({message:"server error " , error})
+    if (!email || !otp) {
+      return res.status(400).json({ message: "Email and OTP are required" });
     }
 
-}
-
-//login iser
-
-
-exports.userLogin = async(req,res)=>{
-
-try{
-
-const {email,password} = req.body;
-
-const user = users.findOne({email})
-
-if(!user) return res.status(404).json({message:"user not found"})
-
-if (user.password == password) return res.status(400).json({message:"incorrect password"})
-
-if(!isVerified) return res.status(400).json({message:"user not verified"})
-
-    req.session.user = {id:user._id,email:user.email,name:user.name};
-    res.json({message:"login successfull"})
-} 
-
-catch(error){
-
-res.status(500).json({message:"unable to login"})
-
-}
-}
-
-
-//log out
-
-
-exports.logoutUser = async(req,res)=>{
-
-try {
+    // Add explicit selection of OTP fields
+    const user = await User.findOne({ email }).select('+otp +otpExpiry');
     
+    if (!user) {
+      console.log(`User not found for email: ${email}`);
+      return res.status(404).json({ message: "User not found" });
+    }
 
-req.session.destroy((req,res)=>{
+    console.log(`User found: ${user.email}`);
+    console.log(`DB OTP: ${user.otp}, DB Expiry: ${user.otpExpiry}`);
+    console.log(`Received OTP: ${otp}`);
 
-res.status(200).json({message:"sessione ended"})
+    if (user.isVerified) {
+      return res.status(400).json({ message: "User already verified" });
+    }
 
-})
+    // Check if OTP exists in document
+    if (user.otp === undefined || user.otp === null) {
+      console.log("OTP missing in user document");
+      return res.status(400).json({ message: "No OTP generated for this user" });
+    }
 
-} catch (error) {
-   if(error) return res.status(400).json({message:"unable to logout"},error)
+    // Check expiry first
+    if (new Date() > user.otpExpiry) {
+      console.log("OTP expired - Current time:", new Date(), "Expiry:", user.otpExpiry);
+      return res.status(400).json({ message: "OTP expired" });
+    }
+
+    // Compare OTPs
+    if (user.otp.toString() !== otp.toString()) {
+      console.log(`OTP mismatch: DB(${typeof user.otp})=${user.otp} vs Input(${typeof otp})=${otp}`);
+      return res.status(400).json({ message: "Invalid OTP" });
+    }
+
+    // Update verification status
+    user.isVerified = true;
+    user.otp = undefined;
+    user.otpExpiry = undefined;
     
-}
+    await user.save();
+    res.status(200).json({ message: "User verified successfully" });
 
+  } catch (error) {
+    console.error("Verification error:", error);
+    res.status(500).json({ message: "Server error", error: error.message });
+  }
+};
+// RESEND OTP
+exports.resendOTP = async (req, res) => {
+  try {
 
-}
+    
+    const { email } = req.body;
+    
+    // Select hidden fields
+    const user = await User.findOne({ email }).select('+otp +otpExpiry');
+    
+    if (!user) {
+      return res.status(404).json({ message: "User does not exist" });
+    }
 
-///dashboard
-exports.dashboard = (req,res)=>{
+    if (user.isVerified) {
+      return res.status(400).json({ message: "User already verified" });
+    }
 
+    const otp = generateOtp();
+    user.otp = otp;
+    user.otpExpiry = new Date(Date.now() + 10 * 60 * 1000); // 10 min
 
-res.json({message:`welcome ${req.session.user.name}`})}
+    await user.save();
+
+    await transport.sendMail({
+      from: process.env.EMAIL_ADDRESS, // Use environment variable
+      to: email,
+      subject: "Your new OTP",
+      text: `Your OTP is ${otp}`
+    });
+
+    res.status(200).json({ message: "OTP resent successfully" });
+
+  } catch (error) {
+    console.error("Resend OTP error:", error);
+    res.status(500).json({ message: "Server error", error: error.message });
+  }
+};
+
+// LOGIN
+exports.userLogin = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+
+    const user = await User.findOne({ email });
+    if (!user) return res.status(404).json({ message: "User not found" });
+
+    if (user.password !== password) {
+      return res.status(400).json({ message: "Incorrect password" });
+    }
+
+    if (!user.isVerified) {
+      return res.status(400).json({ message: "User not verified" });
+    }
+
+    req.session.user = { id: user._id, email: user.email, name: user.name };
+
+    res.status(200).json({ message: "Login successful" });
+
+  } catch (error) {
+    res.status(500).json({ message: "Unable to login", error });
+  }
+};
+
+// LOGOUT
+exports.logoutUser = async (req, res) => {
+  try {
+    req.session.destroy(err => {
+      if (err) return res.status(400).json({ message: "Unable to logout", err });
+      res.status(200).json({ message: "Session ended" });
+    });
+  } catch (error) {
+    res.status(500).json({ message: "Server error", error });
+  }
+};
+
+// DASHBOARD
+exports.dashboard = (req, res) => {
+  if (!req.session.user) {
+    return res.status(401).json({ message: "Not logged in" });
+  }
+  res.json({ message: `Welcome ${req.session.user.name}` });
+};

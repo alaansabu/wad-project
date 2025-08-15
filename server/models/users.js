@@ -26,8 +26,8 @@ const newUser = new mongoose.Schema({
   },
 
   otp: {
-    type: Number,
-    required: [true, "otp is required"]
+    type:String,
+    required: [false, "otp is required"]
   },
 
   otpExpiery:{
@@ -37,14 +37,12 @@ const newUser = new mongoose.Schema({
 
   },
 
-  isVerified:{
 
 
-    type:Boolean,
-    default:false
+  isVerified: { type: Boolean, default: false },
+    
 
-
-  }
+  
 
 });
 
