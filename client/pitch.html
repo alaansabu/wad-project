@@ -31,36 +31,25 @@
       margin: 30px auto;
     }
 
-    /* Upload Box */
-    .upload-box {
-      border: 3px dashed #2f3e46;
-      border-radius: 18px;
-      background-color: #95d5b2;
-      padding: 50px 20px;
-      text-align: center;
-      margin: 0 auto 40px;   /* center it */
-      width: 100%;           /* takes full container width */
-      box-sizing: border-box; /* avoids cutoff issues */
-      display: block;
-      cursor: pointer;
-      transition: all 0.3s ease;
-    }
-    .upload-box:hover {
-      background-color: #7ec89d;
-      box-shadow: 0 6px 15px rgba(0,0,0,0.2);
-      transform: translateY(-3px);
-    }
-    .upload-box input {
+    /* Upload Button */
+    #uploadInput {
       display: none;
     }
-    .upload-box h3 {
-      margin: 15px 0 5px;
-      font-size: 20px;
-      font-weight: 600;
+    .upload-btn {
+      background-color: #2f3e46;
+      color: white;
+      padding: 12px 25px;
+      border-radius: 25px;
+      font-size: 15px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.2);
+      display: inline-block;
     }
-    .upload-box p {
-      font-size: 14px;
-      margin: 0;
+    .upload-btn:hover {
+      background-color: #1c262b;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 12px rgba(0,0,0,0.3);
     }
 
     /* Video Post */
@@ -103,7 +92,7 @@
       background-color: #95d5b2;
     }
 
-    /* Button */
+    /* General Button */
     button {
       background-color: #2f3e46;
       color: white;
@@ -130,11 +119,10 @@
   <div class="container">
 
     <!-- Upload Section -->
-    <label class="upload-box">
-      <h3>Upload Your Startup Pitch</h3>
-      <p>Click to select or drag & drop your video</p>
+    <div style="text-align:center; margin-bottom:30px;">
+      <label for="uploadInput" class="upload-btn">Upload File</label>
       <input type="file" accept="video/*" id="uploadInput">
-    </label>
+    </div>
 
     <!-- Example Videos -->
     <div id="videoList">
