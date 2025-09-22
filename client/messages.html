@@ -3,61 +3,43 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Messages</title>
   <link rel="stylesheet" href="./assets/css/messages.css">
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto&display=swap">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <title>Investor Connect - Messages</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 <body>
+  <div class="chat-app">
+    <!-- Sidebar -->
+    <div class="chat-sidebar">
+      <h2>Chats</h2>
+      <ul id="chat-list">
+        <li onclick="openChat('Alice')">Alice</li>
+        <li onclick="openChat('Bob')">Bob</li>
+        <li onclick="openChat('Charlie')">Charlie</li>
+      </ul>
+    </div>
 
-  <div class="sidebar">
-    <div class="sidebar-header">Investor Connect</div>
-    <div class="contact-list">
-      <div class="contact">
-        <img src="https://i.pravatar.cc/300?img=1" alt="user">
-        <div class="info">
-          <div class="name">Investor One</div>
-          <div class="preview">Looking to invest</div>
+    <!-- Chat Area -->
+    <div class="chat-main">
+      <div class="chat-header">
+        <span id="chat-user">Select a user</span>
+        <div class="chat-actions">
+          <button><i class="fas fa-phone"></i></button>
+          <button><i class="fas fa-video"></i></button>
         </div>
       </div>
-      <div class="contact">
-        <img src="https://i.pravatar.cc/300?img=2" alt="user">
-        <div class="info">
-          <div class="name">Investor Two</div>
-          <div class="preview">Let's connect soon</div>
-        </div>
+
+      <div class="chat-box" id="chat-box">
+        <p class="placeholder">Select a chat to start messaging</p>
+      </div>
+
+      <div class="chat-input">
+        <input type="text" id="message-input" placeholder="Type a message..." disabled>
+        <button onclick="sendMessage()" disabled id="send-btn">Send</button>
       </div>
     </div>
   </div>
 
-  <div class="chat-area">
-    <div class="chat-header">
-      <img src="https://i.pravatar.cc/300?img=1" alt="user">
-      <div class="username">Investor One</div>
-    </div>
-
-    <div class="messages">
-      <div class="message received">Hi! I'm interested in your fintech startups.</div>
-      <div class="message sent">Thanks! I can show you some great opportunities.</div>
-      <div class="message sent">Do you prefer seed funding or growth stage?</div>
-      <div class="seen-text">Seen</div>
-    </div>
-
-    <div class="input-bar">
-      <input type="text" placeholder="Message...">
-
-      <div class="input-icons">
-        <i class="far fa-smile"></i>
-        <label for="file-upload">
-          <i class="fas fa-paperclip"></i>
-        </label>
-        <input type="file" id="file-upload" class="file-input" placeholder="file">
-        <i class="fas fa-microphone"></i>
-      </div>
-
-      <button class="send-btn">Send</button>
-    </div>
-  </div>
-
+  <script src="./assets/js/messages.js"></script>
 </body>
 </html>
