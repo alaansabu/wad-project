@@ -1,30 +1,148 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pitching Platform - Dark Theme</title>
-    <link rel="stylesheet" href="./assets/css/style.css">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>InvestorConnect · Pitching Platform</title>
+  <link rel="stylesheet" href="./assets/css/style.css" />
 </head>
 <body>
-
-    <nav class="navbar">
+  <!-- NAVBAR -->
+  <header class="navbar">
+    <div class="brand">
+      <!-- simple SVG mark + text -->
+      <svg class="brand-mark" viewBox="0 0 48 48" aria-hidden="true">
+        <circle cx="24" cy="24" r="22" fill="none" stroke="currentColor" stroke-width="2"/>
+        <path d="M14 30 L22 18 L34 28" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <div class="brand-text">
         <div class="logo-text">InvestorConnect</div>
-        <ul>
-            <li><a href="about.html">About</a></li>
-            <li><a href="pitchescroll.html">Pitches</a></li>
-            <li><a href="login.html">Login</a></li>
-            <li><a href="messages.html">Messages</a></li>
-            <li><a href="addpost.html">Add post</a></li>
-        </ul>
-    </nav>
-
-    <div class="main-container">
-        <div class="sub-container">
-            <p>Welcome to <strong>PitchConnect</strong>  - Where Startups Meet Investors!</p>
-            <button class="btn">zGet Started</button>
-        </div>
+        <div class="tag">Startups • Pitch • Grow</div>
+      </div>
     </div>
 
+    <nav class="nav-links" aria-label="Primary">
+      <a href="pitchescroll.html">Pitches</a>
+      <a href="about.html">About</a>
+      <a href="messages.html">Messages</a>
+      <a href="addpost.html" class="accent">Add Pitch</a>
+      <a href="login.html" class="btn-outline">Login</a>
+    </nav>
+
+    <button class="hamburger" aria-label="Open menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </header>
+
+  <!-- HERO -->
+  <main class="hero" role="main">
+    <!-- animated decorative blobs -->
+    <svg class="blob blob-1" viewBox="0 0 600 600" aria-hidden="true">
+      <g transform="translate(300,300)">
+        <path d="M120,-170 C180,-110 220,-30 200,30 C180,90 100,120 20,160 C-60,200 -120,240 -170,200 C-220,160 -230,80 -210,10 C-190,-60 -140,-140 -80,-170 C-20,-200 60,-230 120,-170Z"></path>
+      </g>
+    </svg>
+
+    <svg class="blob blob-2" viewBox="0 0 600 600" aria-hidden="true">
+      <g transform="translate(300,300)">
+        <path d="M120,-150 C160,-120 220,-80 220,-20 C220,40 150,80 90,120 C30,160 -50,190 -110,160 C-170,130 -210,70 -200,10 C-190,-50 -130,-110 -70,-140 C-10,-170 80,-180 120,-150Z"></path>
+      </g>
+    </svg>
+
+    <div class="hero-card">
+      <div class="hero-left">
+        <h1>
+          Pitch. Connect. Grow. <span class="accent-text">Find the right investor.</span>
+        </h1>
+        <p class="lead">
+          Share your startup idea, present your deck, and connect with real investors.
+          Built for founders who want clarity, feedback and early-stage support.
+        </p>
+
+        <div class="cta-row">
+          <a href="addpost.html" class="btn-primary">Add Your Pitch</a>
+          <a href="pitchescroll.html" class="btn-ghost">Explore Pitches</a>
+        </div>
+
+        <ul class="quick-stats" aria-hidden="true">
+          <li><strong>1.2K</strong><span>Active Investors</span></li>
+          <li><strong>3.5K</strong><span>Pitches Live</span></li>
+          <li><strong>98%</strong><span>Verified Startups</span></li>
+        </ul>
+      </div>
+
+      <aside class="hero-right" aria-hidden="true">
+        <!-- mini mockup card stack -->
+        <div class="card-stack">
+          <div class="mock-card card-a">
+            <h4>Seed Round Deck</h4>
+            <p>Problem → Solution → Traction</p>
+          </div>
+          <div class="mock-card card-b">
+            <h4>Investor Intro</h4>
+            <p>Profile • Interests • Contact</p>
+          </div>
+          <div class="mock-card card-c">
+            <h4>Message</h4>
+            <p>“Loved the traction, let's talk”</p>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </main>
+
+  <!-- FEATURES -->
+  <section class="features" aria-label="Features">
+    <div class="feature">
+      <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2 L20 8 v8 L12 22 L4 16 V8z" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>
+      <h3>Showcase Your Deck</h3>
+      <p>Upload concise decks and highlight traction points — short and investor-friendly.</p>
+    </div>
+
+    <div class="feature">
+      <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12 h18 M3 6 h18 M3 18 h18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+      <h3>Secure Messaging</h3>
+      <p>Connect privately with investors and track conversations in one place.</p>
+    </div>
+
+    <div class="feature">
+      <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="3" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M6 20c1-4 11-4 12 0" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>
+      <h3>Verified Community</h3>
+      <p>Profiles and investors undergo verification so you pitch to real decision-makers.</p>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="site-footer">
+    <div>
+      <strong>InvestorConnect</strong> — helping early founders get noticed.
+    </div>
+    <div class="footer-links">
+      <a href="about.html">About</a>
+      <a href="privacy.html">Privacy</a>
+      <a href="contact.html">Contact</a>
+    </div>
+  </footer>
+
+  <script>
+    // primary CTA handler (example)
+    document.querySelectorAll('.btn-primary, .btn-ghost, .btn-outline').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        // For anchor elements default is fine; if you later change to <button>, you can navigate:
+        if (btn.tagName.toLowerCase() === 'button') {
+          window.location.assign(btn.dataset.href || 'login.html');
+        }
+      });
+    });
+
+    // basic hamburger for small screens (toggles nav)
+    const ham = document.querySelector('.hamburger');
+    const nav = document.querySelector('.nav-links');
+    ham.addEventListener('click', () => {
+      const expanded = ham.getAttribute('aria-expanded') === 'true';
+      ham.setAttribute('aria-expanded', String(!expanded));
+      nav.classList.toggle('open');
+    });
+  </script>
 </body>
 </html>
