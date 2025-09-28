@@ -21,6 +21,12 @@ phoneField.addEventListener("input", function() {
   checkFormValidity();
 });
 
+// OTP input: numbers only
+const otpInput = document.getElementById("otpInput");
+otpInput.addEventListener("input", function() {
+  this.value = this.value.replace(/[^0-9]/g, '');
+});
+
 // Enable buttons only if all fields valid
 const allFields = [
   document.getElementById("firstName"),
@@ -52,7 +58,7 @@ function checkFormValidity(){
   const allValid = firstName && surname && age && dob && pic && phonePattern.test(phone) && emailPattern.test(email);
 
   document.getElementById("verifyBtn").disabled = !allValid;
-  document.getElementById("submitBtn").disabled = !allValid;
+  // submitBtn will be enabled only after OTP verification
 }
 
 // Profile picture preview
@@ -76,12 +82,21 @@ document.getElementById("profilePic").addEventListener("change", function(){
 document.getElementById("verifyBtn").addEventListener("click", function(){
   document.getElementById("otpSection").classList.remove("hidden");
   showMessage("OTP sent! (Simulated: 1234)", "skyblue");
+  document.getElementById("submitBtn").disabled = true; // ensure submit disabled until verification
 });
 
+// OTP verification
 document.getElementById("submitOtp").addEventListener("click", function(){
-  const otp = document.getElementById("otpInput").value.trim();
-  if(otp === "1234") showMessage("Phone number verified!", "green");
-  else showMessage("Invalid OTP", "red");
+  const otp = otpInput.value.trim();
+  if(otp === "1234") {
+    showMessage("Phone number verified!", "green");
+    document.getElementById("submitBtn").disabled = false; // enable submit after OTP
+    document.getElementById("verifyBtn").disabled = true;  // disable verify again
+    otpInput.disabled = true; // prevent changing OTP after verification
+  } else {
+    showMessage("Invalid OTP", "red");
+    document.getElementById("submitBtn").disabled = true;
+  }
 });
 
 // Age/DOB validation
@@ -145,6 +160,7 @@ document.getElementById("profileForm").addEventListener("submit", function(e){
   document.getElementById("verifyBtn").disabled = true;
   document.getElementById("submitBtn").disabled = true;
   document.getElementById("otpSection").classList.add("hidden");
+  otpInput.disabled = false; // allow new OTP input for next profile
 });
 
 // Show message
